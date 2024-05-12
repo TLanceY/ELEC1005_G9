@@ -53,3 +53,36 @@ Page_2 AccountRegister
         Notify("注册失败，请检查输入或网络连接", NotificationType.Error)
     )
 )
+
+
+Page_3 AccountLogin1
+  Icon2_7: //Back(ScreenTransition.CoverRight)
+Navigate(Welcome,ScreenTransition.CoverRight)
+  Back_14: "Back"
+  Icon4_1: false
+  Button7: Navigate(Welcome, ScreenTransition.None)
+  TextInput1_1: ""
+  TextInput1: ""
+  Forget Password ? Do Not Click here.: "Forget Password ? Do Not Click here."
+  Ellipse3_4: image36113
+  Button3: If(
+    !IsBlank(
+        LookUp(
+            'user-info', 
+            'Email-Address' = TextInput1.Text && passwords = TextInput1_1.Text
+        )
+    ),
+    Navigate(Search1,ScreenTransition.Cover),
+    Navigate(LogInFail,ScreenTransition.Cover)
+);
+
+// Set global variable after successful login check
+If(
+    !IsBlank(
+        LookUp(
+            'user-info', 
+            'Email-Address' = TextInput1.Text && passwords = TextInput1_1.Text
+        )
+    ),
+    Set(globalUserEmail, TextInput1.Text)
+);
