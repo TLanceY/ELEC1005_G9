@@ -1,6 +1,6 @@
 # ELEC1005_G9
 
-Page_1  Welcome:
+Page_1  Welcome
   Label4: "New user? Register here."
   Icon6: false
   "‎أهلاً وسهلاً"
@@ -55,7 +55,7 @@ Page_2 AccountRegister
 )
 
 
-Page_3 AccountLogin1
+Page_3 AccountLogIn1
   Icon2_7: //Back(ScreenTransition.CoverRight)
 Navigate(Welcome,ScreenTransition.CoverRight)
   Back_14: "Back"
@@ -86,3 +86,28 @@ If(
     ),
     Set(globalUserEmail, TextInput1.Text)
 );
+
+
+Page_4 LogInFail
+  Image3: 'F28F6333-968B-4B2D-BBEA-C946F77D7519'
+  Label1: "Hmmm… "
+  Label2: "we can’t seem to find that combination in our records. Please retry."
+  Button5: Navigate(AccountLogIn1, ScreenTransition.CoverRight)
+
+
+Page_5 AccountView
+  Rectangle4: Navigate(Search1, ScreenTransition.Fade)
+  Icon2_6: false
+  Icon4_2: false
+  Back_13: "Back"
+  Rectangle2: Navigate(Welcome, ScreenTransition.None)
+  Log Out: "Log Out"
+  Rectangle2_1: image48334
+  Our User Policy: "Our User Policy"
+  Name: "Name: "
+  Kamisato Ayaka: LookUp('user-info', 'Email-Address' = globalUserEmail).'user-name'
+  E-mail: "E-mail: "
+  114514@test.com: globalUserEmail
+  Ellipse3_3: image48297
+  Ellipse4_4: false
+  Ellipse4_5: false
