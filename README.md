@@ -111,3 +111,68 @@ Page_5 AccountView
   Ellipse3_3: image48297
   Ellipse4_4: false
   Ellipse4_5: false
+
+
+Page_6 Search1
+  Label7_1: "Cart"
+  Label7: "Search"
+  Search_box: ""
+  Ellipse4_3: false
+  Ellipse3_1: image36111
+  Ellipse4_1：false
+  Ellipse4_2: false
+  Icon2: false
+  Icon4_4: false
+  Rectangle19_3: false
+  Rectangle18_3: false
+  Rectangle6: false
+  Image3_1: image4524
+  Image2_1: image4522
+  Image1_1: image4515
+  Image5_1: image4528
+  Recomed To You_1: "Recomed To You"
+  Catalogues_1: "Catalogues"
+  Button8: Navigate(AccountView, ScreenTransition.Fade)
+  Button6: Launch("https://embed.salefinder.com.au/coles/flybuys/#view=catalogue&saleId=54632&locationId=8245&page=1")
+  •••_1: "•
+•
+•"
+
+  Icon1: 
+Set(currentUser, LookUp('user-info', 'Email-Address' = globalUserEmail));
+// 将购物车中的商品列表转换为集合，并排除空行
+ClearCollect(
+    CartItems,
+    Filter(
+        Split(currentUser.'cart-list', Char(10)),
+        !IsBlank(Value)
+    )
+);
+
+// 存储在全局变量中
+Set(globalUserCart, CartItems);
+
+Navigate(Cart1,ScreenTransition.Cover)
+  
+  Search_botton: If(
+    !IsBlank(
+        LookUp(
+            'good-info', 
+            'good-name' = Search_box.Text
+        )
+    ),
+    Navigate(Good1,ScreenTransition.CoverRight),
+    Navigate(GoodNotFound,ScreenTransition.CoverRight)
+);
+
+If(
+    !IsBlank(
+        LookUp(
+            'good-info', 
+            'good-name' = Search_box.Text
+        )
+    ),
+    Set(globalGoodName, Search_box.Text)
+);
+
+
