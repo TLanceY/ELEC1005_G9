@@ -65,27 +65,28 @@ Navigate(Welcome,ScreenTransition.CoverRight)
   TextInput1: ""
   Forget Password ? Do Not Click here.: "Forget Password ? Do Not Click here."
   Ellipse3_4: image36113
-  Button3: If(
-    !IsBlank(
-        LookUp(
-            'user-info', 
-            'Email-Address' = TextInput1.Text && passwords = TextInput1_1.Text
-        )
-    ),
-    Navigate(Search1,ScreenTransition.Cover),
-    Navigate(LogInFail,ScreenTransition.Cover)
-);
-
-// Set global variable after successful login check
-If(
-    !IsBlank(
-        LookUp(
-            'user-info', 
-            'Email-Address' = TextInput1.Text && passwords = TextInput1_1.Text
-        )
-    ),
-    Set(globalUserEmail, TextInput1.Text)
-);
+  Button3: 
+  If(
+      !IsBlank(
+          LookUp(
+              'user-info', 
+              'Email-Address' = TextInput1.Text && passwords = TextInput1_1.Text
+          )
+      ),
+      Navigate(Search1,ScreenTransition.Cover),
+      Navigate(LogInFail,ScreenTransition.Cover)
+  );
+  
+  // Set global variable after successful login check
+  If(
+      !IsBlank(
+          LookUp(
+              'user-info', 
+              'Email-Address' = TextInput1.Text && passwords = TextInput1_1.Text
+          )
+      ),
+      Set(globalUserEmail, TextInput1.Text)
+  );
 
 
 Page_4 LogInFail
@@ -137,42 +138,137 @@ Page_6 Search1
   •••_1: "•
 •
 •"
-
   Icon1: 
-Set(currentUser, LookUp('user-info', 'Email-Address' = globalUserEmail));
-// 将购物车中的商品列表转换为集合，并排除空行
-ClearCollect(
-    CartItems,
-    Filter(
-        Split(currentUser.'cart-list', Char(10)),
-        !IsBlank(Value)
+    Set(currentUser, LookUp('user-info', 'Email-Address' = globalUserEmail));
+    // 将购物车中的商品列表转换为集合，并排除空行
+    ClearCollect(
+        CartItems,
+        Filter(
+            Split(currentUser.'cart-list', Char(10)),
+            !IsBlank(Value)
+        )
+    );
+    // 存储在全局变量中
+    Set(globalUserCart, CartItems);
+    Navigate(Cart1,ScreenTransition.Cover)
+    
+  Search_botton: 
+    If(
+      !IsBlank(
+          LookUp(
+              'good-info', 
+              'good-name' = Search_box.Text
+          )
+      ),
+      Navigate(Good1,ScreenTransition.CoverRight),
+      Navigate(GoodNotFound,ScreenTransition.CoverRight)
+  );
+  If(
+      !IsBlank(
+          LookUp(
+              'good-info', 
+              'good-name' = Search_box.Text
+          )
+      ),
+      Set(globalGoodName, Search_box.Text)
+  );
+    Cart2: false
+
+Page_7 Cart1
+  Label7_3: "Cart"
+  Label7_2: "Search"
+  Icon2_2: Navigate(Search1,ScreenTransition.CoverRight)
+  Icon1_1: Navigate(Cart1,ScreenTransition.Cover)
+  Rectangle18_4: false
+  Cart: "Cart"
+  Line2: false
+  Gallery:
+    Rectangle1: Select(Parent)
+    Separator: Select(Parent)
+    Subtitle1: LookUp('good-info', 'good-name' = ThisItem.Value, 'good-location')
+    Title1: ThisItem.Value
+    Image1: LookUp('good-info', 'good-name' = ThisItem.Value, 'good-image')
+    NextArrow1: 
+    If(
+      !IsBlank(
+          LookUp(
+              'good-info',
+              'good-name' = ThisItem.Value
+        )
+    ),
+    Navigate(Good1, ScreenTransition.Cover),
+    Navigate(GoodNotFound, ScreenTransition.Cover)
+    );
+    If(
+      !IsBlank(
+          LookUp(
+              'good-info',
+              'good-name' = ThisItem.Value
+          )
+      ),
+      Set(globalGoodName, ThisItem.Value)
+    );
+
+
+Page_8 Good1
+  Label6: "Add to cart"
+  Icon5: false
+  Label3_1: LookUp('good-info', 'good-name' = globalGoodName, 'good-price')
+  Label3: LookUp('good-info', 'good-name' = globalGoodName, 'good-name')
+  Icon4: false
+  Icon2_8: false
+  Back_15: "Back"
+  Image1: LookUp('good-info', 'good-name' = globalGoodName, 'good-image')
+  Manufacter: LookUp('good-info', 'good-name' = globalGoodName, 'good-details')
+  Ellipse4: false
+  AvailableType: LookUp('good-info', 'good-name' = globalGoodName, 'good-available')
+  Detail_2: "Details"
+  Location_2: "Location"
+  01.39.0831: LookUp('good-info', 'good-name' = globalGoodName, 'good-location')
+  Rectangle16: false
+  Rectangle4_1: 
+    //Navigate(Search1, ScreenTransition.Fade)
+    Set(currentUser, LookUp('user-info', 'Email-Address' = globalUserEmail));
+    // 将购物车中的商品列表转换为集合，并排除空行
+    ClearCollect(
+        CartItems,
+        Filter(
+            Split(currentUser.'cart-list', Char(10)),
+            !IsBlank(Value)
+        )
+    );
+    // 存储在全局变量中
+    Set(globalUserCart, CartItems);
+    Back(ScreenTransition.Fade)
+  Button2: 
+    // 从 'good-info' 数据集中查找商品名称并存储在全局变量中
+    Set(currentGoodName, LookUp('good-info', 'good-name' = globalGoodName, 'good-name'));
+    // 查找用户记录
+    // 从 'good-info' 数据集中查找商品名称并存储在全局变量中
+    Set(currentGoodName, LookUp('good-info', 'good-name' = globalGoodName, 'good-name'));
+    // 查找用户记录
+    Set(currentUser, LookUp('user-info', 'Email-Address' = globalUserEmail));
+    // 检查并从购物车中删除商品
+    If(
+        Not(IsBlank(currentUser)),
+        // 判断当前购物车中是否存在该商品
+        If(
+            !IsBlank(
+                Find(currentGoodName, Concat(Split(currentUser.'cart-list', Char(10)), Value & Char(10)))
+            ),
+            // 通过 Split 拆分购物车列表，过滤掉需要删除的商品，并排除空行
+            Patch(
+                'user-info',
+                currentUser,
+                {'cart-list': Concat(
+                    Filter(
+                        Split(currentUser.'cart-list', Char(10)),
+                        Value <> currentGoodName && !IsBlank(Value)
+                    ),
+                    Value & Char(10)
+                )}
+            );
+            Notify("The item was successfully deleted.", NotificationType.Success)
+        ),
+        Notify("商品不存在于购物车", NotificationType.Warning)
     )
-);
-
-// 存储在全局变量中
-Set(globalUserCart, CartItems);
-
-Navigate(Cart1,ScreenTransition.Cover)
-  
-  Search_botton: If(
-    !IsBlank(
-        LookUp(
-            'good-info', 
-            'good-name' = Search_box.Text
-        )
-    ),
-    Navigate(Good1,ScreenTransition.CoverRight),
-    Navigate(GoodNotFound,ScreenTransition.CoverRight)
-);
-
-If(
-    !IsBlank(
-        LookUp(
-            'good-info', 
-            'good-name' = Search_box.Text
-        )
-    ),
-    Set(globalGoodName, Search_box.Text)
-);
-
-
