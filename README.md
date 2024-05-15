@@ -272,3 +272,25 @@ Page_8 Good1
         ),
         Notify("商品不存在于购物车", NotificationType.Warning)
     )
+
+
+Page_9 GoodNotFound
+  Image2: 'AA9DB1E0-FF8B-4E1B-A368-52A4C7AB254C'
+  Icon2_4: Back(ScreenTransition.Fade)
+  Back_12: "Back"
+  Sorry, We Not Found: "Sorry,
+    We Not Found."
+
+
+Page_10 ForgetPassword
+  Image7: 'AC69F863-71AB-4198-AFEE-52CF6A43FBBC'
+  Rectangle4_3: Back(ScreenTransition.Fade)
+  Icon2_10: false
+  Back_17: "Back"
+
+
+Page_11 UserPolicy
+  Image6: 'D5FC7114-F0E5-4D31-A7F3-81940AA10424'
+  Rectangle4_2: Back(ScreenTransition.Fade)
+  Icon2_9: false
+  Back_16: "Back"
